@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}StreamPulse — Ваші платформи в одному місці{% endblock %}
+{% block body %}
+<main class="sp-landing">
+  <header class="sp-landing-head">
+    <a class="sp-landing-brand" href="/" aria-label="StreamPulse — головна">
+      {% include "guybrush.html" %}
+      <span class="sp-display">StreamPulse</span>
+    </a>
+
+    <div class="sp-landing-tools">
+      <div class="sp-langrow" role="group" aria-label="Language selector">
+        <button data-lang="uk" type="button" aria-label="Українська">УК</button>
+        <button data-lang="ru" type="button" aria-label="Русский">РУ</button>
+        <button data-lang="en" type="button" aria-label="English">EN</button>
+      </div>
+      <button id="themeBtn" class="sp-landing-theme" type="button" aria-label="Toggle theme">
+        <svg class="sp-ico"><use href="#i-moon"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <section class="sp-landing-hero" aria-labelledby="landingTitle">
+    {% include "digital_animation.html" %}
+    <p class="sp-landing-kicker" data-i18n="landing_welcome">Welcome</p>
+    <h1 id="landingTitle">
+      <span class="sp-display">StreamPulse</span>
+    </h1>
+    <p class="sp-landing-statement" data-i18n="landing_statement">Ваші платформи. В одному місці.</p>
+    <p class="sp-landing-copy" data-i18n="landing_copy">
+      Підключайте сервіси та керуйте щоденними задачами — спокійно, зрозуміло, без зайвого.
+    </p>
+
+    <div class="sp-landing-actions">
+      <a class="sp-landing-button primary" href="/login" data-page-transition data-i18n="landing_signin">Увійти</a>
+      <a class="sp-landing-button secondary" href="/register" data-page-transition data-i18n="landing_signup">Створити акаунт</a>
+    </div>
+
+    <div class="sp-landing-platforms" data-i18n-aria="landing_platforms_label" aria-label="Підтримувані платформи">
+      <span class="sp-landing-platform">
+        <svg class="sp-platform-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="m21 3-7.2 18-3.9-7.1L3 10.2 21 3Z" />
+          <path d="m9.9 13.9 4.2-4.2" />
+        </svg>
+        Telegram
+      </span>
+      <span class="sp-landing-platform">
+        <svg class="sp-platform-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M7.2 6.2a15.5 15.5 0 0 1 9.6 0l1.5 2.1a14.2 14.2 0 0 1 1.4 9.3 12.8 12.8 0 0 1-4.1 2.1l-1-1.6a8.4 8.4 0 0 0 1.8-.9 12.2 12.2 0 0 1-8.8 0 8.4 8.4 0 0 0 1.8.9l-1 1.6a12.8 12.8 0 0 1-4.1-2.1 14.2 14.2 0 0 1 1.4-9.3l1.5-2.1Z" />
+          <circle cx="9" cy="13" r="1" />
+          <circle cx="15" cy="13" r="1" />
+        </svg>
+        Discord
+      </span>
+      <span class="sp-landing-platform">
+        <svg class="sp-platform-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="14" rx="4" />
+          <path d="m10 9 5 3-5 3V9Z" />
+        </svg>
+        YouTube
+      </span>
+    </div>
+
+    <ol class="sp-landing-steps" data-i18n-aria="landing_steps_label" aria-label="Як це працює">
+      <li>
+        <span class="sp-landing-step-number" aria-hidden="true">01</span>
+        <span data-i18n="landing_step_connect">Підключіть сервіс</span>
+      </li>
+      <li>
+        <span class="sp-landing-step-number" aria-hidden="true">02</span>
+        <span data-i18n="landing_step_action">Оберіть дію</span>
+      </li>
+      <li>
+        <span class="sp-landing-step-number" aria-hidden="true">03</span>
+        <span data-i18n="landing_step_results">Стежте за результатом</span>
+      </li>
+    </ol>
+  </section>
+
+  <footer class="sp-landing-foot">
+    <span data-i18n="landing_footer">Зрозуміло з першого кроку.</span>
+  </footer>
+</main>
+<div class="sp-page-curtain" aria-hidden="true"></div>
+{% endblock %}

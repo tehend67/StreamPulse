@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}StreamPulse — Реєстрація{% endblock %}
+{% block body %}
+
+
+<div class="sp-authwrap">
+  <div id="authPage" class="sp-authpage visible">
+    <div class="sp-authshadow" aria-hidden="true"></div>
+
+    <main class="sp-authcard">
+
+      
+      <div class="sp-brand big sp-authbrand">
+        {% include "digital_animation.html" %}
+        {% include "guybrush.html" %}
+        <span class="sp-display">StreamPulse</span>
+      </div>
+
+      <h1 data-i18n="register">Реєстрація</h1>
+
+      <form id="registerForm" class="sp-form" autocomplete="on" novalidate>
+
+        <div>
+          <label class="sp-form-label" for="regUsername" data-i18n="label_username">Ім'я користувача</label>
+          <input
+            id="regUsername"
+            name="username"
+            type="text"
+            required
+            minlength="3"
+            maxlength="64"
+            autocomplete="username"
+            placeholder="cooluser"
+            spellcheck="false"
+            autocapitalize="none"
+          >
+        </div>
+
+        <div>
+          <label class="sp-form-label" for="regEmail" data-i18n="label_email">Пошта</label>
+          <input
+            id="regEmail"
+            name="email"
+            type="email"
+            required
+            autocomplete="email"
+            placeholder="your@email.com"
+            spellcheck="false"
+          >
+        </div>
+
+        <div>
+          <label class="sp-form-label" for="regPass" data-i18n="label_pass">Пароль</label>
+          <div style="position:relative">
+            <input
+              id="regPass"
+              name="password"
+              type="password"
+              required
+              minlength="6"
+              maxlength="128"
+              autocomplete="new-password"
+              placeholder="••••••••"
+              style="padding-right:44px"
+            >
+            <button type="button" id="toggleRegPass" class="sp-icon-button"
+              style="position:absolute;right:12px;top:50%;transform:translateY(-50%);border:0;cursor:pointer;color:var(--mut);padding:4px;line-height:1;display:flex;align-items:center"
+              aria-label="Show password" tabindex="-1">
+              <svg class="sp-ico"><use href="#i-eye"/></svg>
+            </button>
+          </div>
+          
+          <div id="passStrength" style="display:none;height:3px;border-radius:3px;background:var(--line);overflow:hidden;margin-top:2px">
+            <div id="passStrengthBar" style="height:100%;width:0;background:var(--fg);border-radius:3px;transition:width .35s ease,background .35s ease"></div>
+          </div>
+        </div>
+
+        <div id="regError"
+          style="display:none;color:var(--fg2);font-size:13px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg2);line-height:1.4"
+          role="alert" aria-live="assertive">
+        </div>
+
+        <button type="submit" id="regBtn" style="margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px">
+          <span id="regBtnTxt" data-i18n="register">Реєстрація</span>
+          <span id="regBtnSpinner" style="display:none;line-height:1"><span class="sp-loader sm"></span></span>
+        </button>
+
+      </form>
+
+      <div class="sp-alt">
+        <a href="/login" data-i18n="go_login" style="color:var(--mut);text-decoration:none">Вже є акаунт?</a>
+        <a href="/" style="color:var(--mut);text-decoration:none;font-size:12px" data-i18n="go_home">← Головна</a>
+      </div>
+
+      <div class="sp-divider">
+        <span data-i18n="or_lang">Мова</span>
+      </div>
+
+      <div class="sp-langrow auth-langrow" id="langRowReg">
+        <button data-lang="uk" type="button">УК</button>
+        <button data-lang="ru" type="button">РУ</button>
+        <button data-lang="en" type="button">EN</button>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<div id="toastRoot" class="sp-toasts" aria-live="polite" aria-atomic="true"></div>
+<div id="guardVeil" class="sp-veil" hidden aria-hidden="true"></div>
+{% endblock %}

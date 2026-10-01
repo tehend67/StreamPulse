@@ -1,0 +1,498 @@
+{% extends "base.html" %}
+{% block title %}StreamPulse — Control Center{% endblock %}
+{% block head %}
+<style>
+  
+  .sp-top {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 18px;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    background: var(--glass);
+    backdrop-filter: blur(24px) saturate(1.2);
+    -webkit-backdrop-filter: blur(24px) saturate(1.2);
+    box-shadow: var(--sh2);
+    transition: background var(--t);
+    position: relative;
+    z-index: 20;
+  }
+
+  
+  .sp-top-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-start;
+    min-width: 0;
+  }
+
+  
+  .sp-top-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    font-family: "Bahnschrift", "Segoe UI Variable Display", "Segoe UI", sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: -.4px;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  
+  .sp-top-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-end;
+    min-width: 0;
+  }
+
+  
+  .sp-userpill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background-color: var(--glass2);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  
+  .sp-homelink {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--mut);
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: .3px;
+    transition: all var(--tf);
+    white-space: nowrap;
+  }
+  .sp-homelink:hover {
+    color: var(--fg);
+    border-color: var(--fg2);
+    background: var(--glass2);
+  }
+
+  
+  .sp-top-right .sp-search {
+    flex: 1;
+    max-width: 220px;
+    padding: 6px 11px;
+    border-radius: 11px;
+    border: 1px solid transparent;
+    background: transparent;
+    transition: border-color var(--tf), background var(--tf);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--mut);
+  }
+  .sp-top-right .sp-search:focus-within {
+    border-color: var(--line);
+    background: var(--glass2);
+  }
+  .sp-top-right .sp-search input {
+    background: transparent;
+    border: 0;
+    outline: 0;
+    color: var(--fg);
+    font-size: 13px;
+    font-family: var(--font);
+    width: 100%;
+    min-width: 0;
+  }
+  .sp-top-right .sp-search input::placeholder { color: var(--mut); }
+
+  
+  .sp-account-modal {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    z-index: 70;
+    width: 280px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: var(--card);
+    box-shadow: var(--sh);
+    padding: 18px;
+    animation: pop .3s cubic-bezier(.2,.9,.3,1.1);
+  }
+  .sp-account-modal .sp-arow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line2);
+    font-size: 13px;
+    color: var(--fg2);
+  }
+  .sp-account-modal .sp-arow:last-child { border-bottom: none; }
+  .sp-account-modal .sp-arow .sp-alabel {
+    font-size: 11px;
+    color: var(--mut);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    min-width: 70px;
+  }
+  .sp-account-modal .sp-aval {
+    font-weight: 600;
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .sp-account-modal[hidden] { display: none; }
+
+  
+  .sp-win .sp-form input,
+  .sp-win .sp-form textarea,
+  .sp-win .sp-form select {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .sp-win .sp-form > div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  #credBox > div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 0;
+  }
+
+  @media (max-width: 900px) {
+    .sp-top {
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      gap: 8px;
+    }
+    .sp-top-center { font-size: 15px; }
+    .sp-top-right .sp-search { max-width: 140px; }
+    .sp-homelink span { display: none; }
+  }
+  @media (max-width: 600px) {
+    .sp-top { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); padding: 9px 12px; }
+    .sp-top-center { font-size: 14px; }
+    .sp-top-right .sp-search { display: none; }
+    #mobileSearch { display: block; }
+  }
+</style>
+{% endblock %}
+{% block body %}
+<div class="sp-shell">
+
+  
+  <aside class="sp-side" id="sidebar" role="navigation" aria-label="Main navigation">
+    <div class="sp-brand" role="banner" aria-label="StreamPulse">
+      {% include "guybrush.html" %}
+      <span class="sp-display">StreamPulse</span>
+    </div>
+
+    <nav class="sp-nav" role="menubar">
+      <button class="sp-navitem is-active" data-nav="overview" role="menuitem" aria-current="page">
+        <svg class="sp-ico"><use href="#i-grid"/></svg>
+        <span data-i18n="dashboard">Огляд</span>
+      </button>
+      <button class="sp-navitem" data-nav="telegram" role="menuitem">
+        <svg class="sp-ico"><use href="#i-send"/></svg>
+        <span data-i18n="telegram">Telegram Боти</span>
+      </button>
+      <button class="sp-navitem" data-nav="discord" role="menuitem">
+        <svg class="sp-ico"><use href="#i-chat"/></svg>
+        <span data-i18n="discord">Discord Сервери</span>
+      </button>
+      <button class="sp-navitem" data-nav="youtube" role="menuitem">
+        <svg class="sp-ico"><use href="#i-play"/></svg>
+        <span data-i18n="youtube">YouTube Канали</span>
+      </button>
+      <button class="sp-navitem" data-nav="vault" role="menuitem">
+        <svg class="sp-ico"><use href="#i-lock"/></svg>
+        <span data-i18n="vault">Системний Vault</span>
+      </button>
+      <button class="sp-navitem" data-nav="tasks" role="menuitem">
+        <svg class="sp-ico"><use href="#i-wrench"/></svg>
+        <span data-i18n="tasks">Конструктор задач</span>
+      </button>
+    </nav>
+
+    <div class="sp-sidefoot">
+      <div class="sp-langrow" id="langRowSide" role="group" aria-label="Language selector">
+        <button data-lang="uk" type="button" aria-label="Українська">УК</button>
+        <button data-lang="ru" type="button" aria-label="Русский">РУ</button>
+        <button data-lang="en" type="button" aria-label="English">EN</button>
+      </div>
+      <button id="themeBtn" class="sp-themebtn" type="button" aria-label="Toggle theme">
+        <svg class="sp-ico"><use href="#i-moon"/></svg>
+        <span data-i18n="dark">Темна</span>
+      </button>
+      <button id="logoutBtn" class="sp-ghost" type="button" data-i18n="logout" aria-label="Logout">Вийти</button>
+    </div>
+  </aside>
+
+  
+  <div class="sp-main" role="main">
+
+    
+    <header class="sp-top" role="banner">
+
+      
+      <div class="sp-top-left">
+        <button class="sp-burger" type="button" aria-label="Toggle sidebar"
+          aria-expanded="false" aria-controls="sidebar">
+          <span></span><span></span><span></span>
+        </button>
+
+        
+        <div style="position:relative" id="userPillWrap">
+          <button class="sp-userpill" id="userPillBtn" type="button" aria-label="Account" aria-expanded="false" aria-controls="accountDropdown">
+            <svg class="sp-ico"><use href="#i-user"/></svg>
+            <span id="userName">…</span>
+            <span id="netDot" class="sp-dot" role="status" aria-label="Connection status"></span>
+          </button>
+          
+          <div id="accountDropdown" class="sp-account-modal" hidden>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--line2)">
+              <div style="width:36px;height:36px;border-radius:50%;background:var(--bg2);border:1px solid var(--line);display:grid;place-items:center;flex:none">
+                <svg class="sp-ico"><use href="#i-user"/></svg>
+              </div>
+              <div>
+                <div style="font-weight:800;font-size:14px" id="dropUserName">…</div>
+                <div style="font-size:11px;color:var(--mut)" id="dropUserEmail">…</div>
+              </div>
+            </div>
+            <div class="sp-arow">
+              <span class="sp-alabel" data-i18n="account_session">Сеанс</span>
+              <span class="sp-aval" id="dropUptime">—</span>
+            </div>
+            <div class="sp-arow">
+              <span class="sp-alabel" data-i18n="connected">Сервісів</span>
+              <span class="sp-aval" id="dropInteg">—</span>
+            </div>
+            <div class="sp-arow">
+              <span class="sp-alabel" data-i18n="active_tasks">Задач</span>
+              <span class="sp-aval" id="dropTasks">—</span>
+            </div>
+            <div class="sp-arow">
+              <span class="sp-alabel" data-i18n="account_role">Роль</span>
+              <span class="sp-aval" id="dropRole">—</span>
+            </div>
+            <div class="sp-arow">
+              <span class="sp-alabel" data-i18n="account_joined">З нами</span>
+              <span class="sp-aval" id="dropSince">—</span>
+            </div>
+            <div class="sp-arow" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--line2);border-bottom:none">
+              <button id="dropLogout" class="sp-btn ghost" style="width:100%;font-size:12px;padding:8px" type="button" data-i18n="logout">Вийти</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="sp-top-center">
+        {% include "guybrush.html" %}
+        <span class="sp-display">StreamPulse</span>
+      </div>
+
+      
+      <div class="sp-top-right">
+        <div class="sp-search" role="search">
+          <svg class="sp-ico" style="width:15px;height:15px"><use href="#i-search"/></svg>
+          <input
+            id="searchInput"
+            type="search"
+            data-i18n-ph="search"
+            placeholder="Пошук..."
+            aria-label="Search integrations"
+            autocomplete="off"
+            spellcheck="false"
+          >
+        </div>
+        <a href="/dashboard" class="sp-homelink" title="Головна сторінка">
+          <svg class="sp-ico" style="width:15px;height:15px"><use href="#i-grid"/></svg>
+          <span data-i18n="dashboard">Головна</span>
+        </a>
+      </div>
+
+    </header>
+
+    
+    <section class="sp-metrics" aria-label="Quick metrics">
+      <div class="sp-metric tilt-a" role="status">
+        <div class="sp-mlabel" data-i18n="connected">Підключено сервісів</div>
+        <div class="sp-mval" id="mConnected" aria-live="polite">0</div>
+      </div>
+      <div class="sp-metric tilt-b" role="status">
+        <div class="sp-mlabel" data-i18n="active_tasks">Активних задач</div>
+        <div class="sp-mval" id="mActive" aria-live="polite">0</div>
+      </div>
+      <div class="sp-metric tilt-c" role="status">
+        <div class="sp-mlabel" data-i18n="m_health">Стан системи</div>
+        <div class="sp-mval" id="mHealth" aria-live="polite">—</div>
+      </div>
+      <button class="sp-fab" id="addBtn" type="button" aria-label="Add integration">
+        <svg class="sp-ico lg"><use href="#i-plus"/></svg>
+      </button>
+    </section>
+
+    
+    <section id="pstats" class="sp-pstats" hidden aria-label="Platform statistics" aria-live="polite"></section>
+
+    
+    <section id="cards" class="sp-cards" aria-label="Integrations" aria-live="polite"></section>
+
+    
+    <section class="sp-feedwrap" aria-label="Live activity feed">
+      <div class="sp-feedhead">
+        <span class="sp-pulse" aria-hidden="true"></span>
+        <span data-i18n="live_feed">Live Activity Feed</span>
+        <span id="wsState" class="sp-ws" role="status" aria-live="polite">…</span>
+      </div>
+      <div id="feed" class="sp-feed" role="log" aria-live="polite" aria-label="Activity log"></div>
+    </section>
+
+  </div>
+</div>
+
+
+<div id="modalRoot" role="dialog" aria-modal="true"></div>
+
+
+<div id="browserDialogRoot"></div>
+
+
+<div id="toastRoot" class="sp-toasts" role="region" aria-live="polite" aria-atomic="true"></div>
+
+
+<div id="guardVeil" class="sp-veil" hidden aria-hidden="true"></div>
+
+
+<div id="freshVeil" class="sp-welcome" hidden aria-live="polite">
+  <div class="sp-welogo">
+    {% include "digital_animation.html" %}
+    <div class="sp-wesub" data-i18n="landing_welcome">Welcome</div>
+    <div class="sp-wetitle">StreamPulse</div>
+  </div>
+</div>
+
+<script>
+
+(function(){
+  var _open = false;
+  var btn = document.getElementById('userPillBtn');
+  var dd  = document.getElementById('accountDropdown');
+  var lo  = document.getElementById('dropLogout');
+  var wrap = document.getElementById('userPillWrap');
+  var _startTime = Date.now();
+  var _uptimeTimer = null;
+
+  try {
+    var savedStart = Number(sessionStorage.getItem('sp_session_started_at'));
+    if (Number.isFinite(savedStart) && savedStart > 0 && savedStart <= _startTime) {
+      _startTime = savedStart;
+    } else {
+      sessionStorage.setItem('sp_session_started_at', String(_startTime));
+    }
+  } catch(e){}
+
+  function fmtUptime(ms){
+    var seconds = Math.max(0, Math.floor(ms / 1000));
+    var days = Math.floor(seconds / 86400);
+    var hours = Math.floor((seconds % 86400) / 3600);
+    var minutes = Math.floor((seconds % 3600) / 60);
+    var remainder = seconds % 60;
+    if (days) return days + 'd ' + hours + 'h';
+    if (hours) return hours + 'h ' + minutes + 'm';
+    if (minutes) return minutes + 'm ' + remainder + 's';
+    return remainder + 's';
+  }
+
+  function tickUptime(){
+    var el = document.getElementById('dropUptime');
+    if(el) el.textContent = fmtUptime(Date.now() - _startTime);
+  }
+
+  function openDrop(){
+    _open = true;
+    dd.hidden = false;
+    btn.setAttribute('aria-expanded', 'true');
+    tickUptime();
+    _uptimeTimer = setInterval(tickUptime, 1000);
+    try {
+      var u = window.state && window.state.user;
+      if(u){
+        var dn = document.getElementById('dropUserName');
+        var de = document.getElementById('dropUserEmail');
+        var dr = document.getElementById('dropRole');
+        var ds = document.getElementById('dropSince');
+        if(dn) dn.textContent = u.username || '—';
+        if(de) de.textContent = u.email || '—';
+        if(dr) dr.textContent = u.is_admin ? 'Admin' : 'User';
+        if(ds) ds.textContent = u.created_at
+          ? new Date(u.created_at).toLocaleDateString()
+          : '—';
+      }
+    } catch(e){}
+    try {
+      var mc = document.getElementById('mConnected');
+      var ma = document.getElementById('mActive');
+      var di2 = document.getElementById('dropInteg');
+      var dt2 = document.getElementById('dropTasks');
+      if(di2 && mc) di2.textContent = mc.textContent;
+      if(dt2 && ma) dt2.textContent = ma.textContent;
+    } catch(e){}
+  }
+
+  function closeDrop(){
+    _open = false;
+    dd.hidden = true;
+    btn.setAttribute('aria-expanded', 'false');
+    if (_uptimeTimer) {
+      clearInterval(_uptimeTimer);
+      _uptimeTimer = null;
+    }
+  }
+
+  if(btn) btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    _open ? closeDrop() : openDrop();
+  });
+
+  document.addEventListener('click', function(e){
+    if(_open && wrap && !wrap.contains(e.target)){
+      closeDrop();
+    }
+  });
+
+  if(lo) lo.addEventListener('click', function(){
+    try{ localStorage.removeItem('sp_tok'); localStorage.removeItem('sp_token'); }catch(ex){}
+    try{ sessionStorage.removeItem('sp_session_started_at'); }catch(ex){}
+    location.href = '/login';
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && _open) closeDrop();
+  });
+})();
+</script>
+{% endblock %}

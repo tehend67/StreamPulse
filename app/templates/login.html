@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}StreamPulse — Вхід{% endblock %}
+{% block body %}
+
+
+<div class="sp-authwrap">
+  <div id="authPage" class="sp-authpage visible">
+    <div class="sp-authshadow" aria-hidden="true"></div>
+
+    <main class="sp-authcard">
+
+      
+      <div class="sp-brand big sp-authbrand">
+        {% include "digital_animation.html" %}
+        {% include "guybrush.html" %}
+        <span class="sp-display">StreamPulse</span>
+      </div>
+
+      <h1 data-i18n="login">Вхід</h1>
+
+      <form id="loginForm" class="sp-form" autocomplete="on" novalidate>
+
+        <div>
+          <label class="sp-form-label" for="loginEmail" data-i18n="label_email">Пошта</label>
+          <input
+            id="loginEmail"
+            name="email"
+            type="email"
+            required
+            autocomplete="email"
+            placeholder="your@email.com"
+            spellcheck="false"
+          >
+        </div>
+
+        <div>
+          <label class="sp-form-label" for="loginPass" data-i18n="label_pass">Пароль</label>
+          <div style="position:relative">
+            <input
+              id="loginPass"
+              name="password"
+              type="password"
+              required
+              autocomplete="current-password"
+              placeholder="••••••••"
+              style="padding-right:44px"
+            >
+            <button type="button" id="togglePass" class="sp-icon-button"
+              style="position:absolute;right:12px;top:50%;transform:translateY(-50%);border:0;cursor:pointer;color:var(--mut);padding:4px;line-height:1;display:flex;align-items:center"
+              aria-label="Show password" tabindex="-1">
+              <svg class="sp-ico"><use href="#i-eye"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div id="loginError"
+          style="display:none;color:var(--fg2);font-size:13px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg2);line-height:1.4"
+          role="alert" aria-live="assertive">
+        </div>
+
+        <button type="submit" id="loginBtn" style="margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px">
+          <span id="loginBtnTxt" data-i18n="login">Вхід</span>
+          <span id="loginBtnSpinner" style="display:none;line-height:1"><span class="sp-loader sm"></span></span>
+        </button>
+
+      </form>
+
+      <div class="sp-alt">
+        <a href="/register" data-i18n="go_register" style="color:var(--mut);text-decoration:none">Ще немає акаунту?</a>
+        <a href="/" style="color:var(--mut);text-decoration:none;font-size:12px" data-i18n="go_home">← Головна</a>
+      </div>
+
+      <div class="sp-divider">
+        <span data-i18n="or_lang">Мова</span>
+      </div>
+
+      <div class="sp-langrow auth-langrow" id="langRowLogin">
+        <button data-lang="uk" type="button">УК</button>
+        <button data-lang="ru" type="button">РУ</button>
+        <button data-lang="en" type="button">EN</button>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<div id="toastRoot" class="sp-toasts" aria-live="polite" aria-atomic="true"></div>
+<div id="guardVeil" class="sp-veil" hidden aria-hidden="true"></div>
+{% endblock %}

@@ -1,0 +1,135 @@
+version: "3.9"
+
+services:
+
+  db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: streampulse
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: streampulse
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U streampulse -d streampulse"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+    networks:
+      - sp_net
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    command: >
+      redis-server
+      --appendonly yes
+      --appendfsync everysec
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 5s
+    networks:
+      - sp_net
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://streampulse:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@db:5432/streampulse
+      SYNC_DATABASE_URL: postgresql+psycopg2://streampulse:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@db:5432/streampulse
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ./app/static:/code/app/static:ro
+      - ./app/templates:/code/app/templates:ro
+    networks:
+      - sp_net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      SYNC_DATABASE_URL: postgresql+psycopg2://streampulse:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@db:5432/streampulse
+      REDIS_URL: redis://redis:6379/0
+    networks:
+      - sp_net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  beat:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    restart: always
+    depends_on:
+      worker:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      SYNC_DATABASE_URL: postgresql+psycopg2://streampulse:streampulse@db:5432/streampulse
+      REDIS_URL: redis://redis:6379/0
+    command: >
+      celery -A app.worker.celery_app.celery beat
+      --loglevel=info
+      --scheduler celery.beat.PersistentScheduler
+    volumes:
+      - beatdata:/tmp/celerybeat
+    networks:
+      - sp_net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+
+volumes:
+  pgdata:
+    driver: local
+  redisdata:
+    driver: local
+  beatdata:
+    driver: local
+
+networks:
+  sp_net:
+    driver: bridge
