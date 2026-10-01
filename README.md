@@ -1,28 +1,14 @@
 # StreamPulse
 
-<div align="center">
-
 ### Ваши платформы. В одном месте.
 
 **StreamPulse** — self-hosted панель управления интеграциями Telegram, Discord и YouTube. Подключайте сервисы, запускайте действия, следите за задачами и событиями в одном спокойном чёрно-белом интерфейсе.
 
-<br>
+![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-API-009688?logo=fastapi&logoColor=white)
+![Telegram · Discord · YouTube](https://img.shields.io/badge/Integrations-Telegram%20%7C%20Discord%20%7C%20YouTube-5865F2)
 
-[Быстрый запуск](#-демо-и-быстрый-запуск) ·
-[Возможности](#-возможности) ·
-[Интеграции](#-поддерживаемые-действия) ·
-[API](#-api) ·
-[Безопасность](#-безопасность) ·
-[Связаться с автором](#-разработка-на-заказ)
-
-<br>
-
-![Python](https://img.shields.io/badge/Python-3.12-111111?style=for-the-badge&logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-API-111111?style=for-the-badge&logo=fastapi&logoColor=white)
-![Platforms](https://img.shields.io/badge/Telegram%20%7C%20Discord%20%7C%20YouTube-111111?style=for-the-badge)
-![License](https://img.shields.io/badge/License-not%20specified-777777?style=for-the-badge)
-
-</div>
+[Быстрый запуск](#-демо-и-быстрый-запуск) · [Возможности](#-возможности) · [Действия](#-поддерживаемые-действия) · [API](#-api) · [Развёртывание](#-контейнерный-запуск)
 
 ---
 
@@ -30,9 +16,7 @@
 
 Ниже — скриншот панели StreamPulse. Чтобы открыть **интерактивную версию**, запустите проект по инструкции и перейдите на [http://localhost:8000](http://localhost:8000). После регистрации добавьте собственную интеграцию: демонстрационные подключения и чужие API-ключи в проект не встроены.
 
-<p align="center">
-  <img src="assets/demo-dashboard.png" alt="Скриншот панели StreamPulse: обзор и подключённая Telegram-интеграция" width="100%">
-</p>
+![Панель управления StreamPulse](assets/demo-dashboard.png)
 
 > **Важно:** публичный экземпляр StreamPulse пока не размещён. Адрес `localhost` доступен только на вашем компьютере; для публичной демонстрации проект нужно отдельно развернуть на сервере с HTTPS.
 
@@ -368,18 +352,8 @@ StreamPulse — развиваемый проект. Наличие работа
 - посадочные страницы;
 - Telegram-боты и автоматизация.
 
-Для связи и заказов: **[@codepatche](https://t.me/codepatche)**  
+Для связи и заказов: **[@codepatche](https://t.me/codepatche)**
+
 Телефон / мессенджер: **[+380 660 328 245](tel:+380660328245)** · **[+380 986 158 874](tel:+380986158874)** · **[+380 933 878 633](tel:+380933878633)**
 
 ---
-
-<div align="center">
-
-**StreamPulse · Ваши платформы. В одном месте.**
-
-Сделано с вниманием к деталям и удобству.
-
-</div>
-#   S t r e a m P u l s e  
- #   S t r e a m P u l s e  
- "# StreamPulse" 
